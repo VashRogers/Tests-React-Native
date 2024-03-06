@@ -8,28 +8,32 @@ import {ImageIcon} from '../ImageIcon/ImageIcon';
 const starIcon = require('../../assets/images/star.png');
 
 interface Props {
-  rating?: Rating;
+    rating?: Rating;
 }
 export function StarRating({rating}: Props) {
-  if (!rating?.average) {
-    return null;
-  }
+    if (!rating?.average) {
+        return null;
+    }
 
-  return (
-    <View style={styles.content}>
-      <ImageIcon color={colors.gold} source={starIcon} />
-      <Text style={styles.ratingText}> {rating.average}</Text>
-    </View>
-  );
+    return (
+        <View style={styles.content}>
+            <ImageIcon
+                testID="starIcon"
+                color={colors.gold}
+                source={starIcon}
+            />
+            <Text style={styles.ratingText}> {rating.average}</Text>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingText: {
-    color: colors.onBackground,
-    fontSize: 20,
-  },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    ratingText: {
+        color: colors.onBackground,
+        fontSize: 20,
+    },
 });
