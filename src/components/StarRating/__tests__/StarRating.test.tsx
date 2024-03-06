@@ -6,9 +6,9 @@ import {StarRating} from '../StarRating';
 describe('StarRating', () => {
     describe('rating was passed', () => {
         it('show the average', () => {
-            const {getByText} = render(<StarRating rating={{average: 7}} />);
+            const {getAllByText} = render(<StarRating rating={{average: 7}} />);
 
-            const element = getByText('7');
+            const element = getAllByText('7');
             expect(element).toBeTruthy();
         });
 
