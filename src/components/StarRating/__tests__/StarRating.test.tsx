@@ -19,6 +19,14 @@ describe('StarRating', () => {
             expect(icon).toBeTruthy();
         });
     });
+
+    // describe('rating was not passing', () => {
+    //     it('the component return nothing', () => {
+    //         const {container} = render(<StarRating />);
+
+    //         expect(container.children).toEqual([]);
+    //     });
+    // });
     // test('if passed rating show the average and star icon', () => {
     //     //test pode ser o mesmo que it, um jeito melhor de escrever.
     //     // aqui vai o teste
