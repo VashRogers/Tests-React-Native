@@ -1,12 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ListRenderItemInfo,
-  FlatList,
+    View,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    ListRenderItemInfo,
+    FlatList,
 } from 'react-native';
 import {Modalize} from 'react-native-modalize';
 import {useQuery} from 'react-query';
@@ -25,93 +25,98 @@ import {ShowInfo} from '../ShowInfo/ShowInfo';
 
 const arrowDownIcon = require('../../../../assets/images/arrow-down.png');
 type Props = {
-  show: Show;
+    show: Show;
 };
 export function EpisodeList({show}: Props) {
-  const [selectedSeason, setSelectedSeason] = useState('1');
-  const modalizeRef = useRef<Modalize>(null);
+    const [selectedSeason, setSelectedSeason] = useState('1');
+    const modalizeRef = useRef<Modalize>(null);
 
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
-  const {data} = useQuery([QueryKeys.EPISODE_LIST, show.id], () =>
-    showService.getEpisodes(show.id),
-  );
-
-  function navigateToEpisodeDetails(episode: Episode) {
-    navigation.navigate('EpisodeDetails', {episode});
-  }
-
-  function renderItem({item}: ListRenderItemInfo<Episode>) {
-    return (
-      <CardImage
-        onPress={() => navigateToEpisodeDetails(item)}
-        image={item.image}
-        title={item.name}>
-        <View style={styles.content}>
-          <StarRating rating={item.rating} />
-        </View>
-      </CardImage>
+    const {data} = useQuery([QueryKeys.EPISODE_LIST, show.id], () =>
+        showService.getEpisodes(show.id),
     );
-  }
 
-  function openModal() {
-    modalizeRef.current?.open();
-  }
+    function navigateToEpisodeDetails(episode: Episode) {
+        navigation.navigate('EpisodeDetails', {episode});
+    }
 
-  function Header() {
+    function renderItem({item}: ListRenderItemInfo<Episode>) {
+        return (
+            <CardImage
+                onPress={() => navigateToEpisodeDetails(item)}
+                image={item.image}
+                title={item.name}>
+                <View style={styles.content}>
+                    <StarRating rating={item.rating} />
+                </View>
+            </CardImage>
+        );
+    }
+
+    function openModal() {
+        modalizeRef.current?.open();
+    }
+
+    function Header() {
+        return (
+            <View>
+                <ShowInfo show={show} />
+                <TouchableOpacity
+                    style={styles.seasonContainer}
+                    onPress={openModal}>
+                    <Text style={styles.seasonText}>
+                        Season: {selectedSeason}
+                    </Text>
+                    <ImageIcon
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{marginLeft: 8}}
+                        size={16}
+                        source={arrowDownIcon}
+                        color={colors.primary}
+                    />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     return (
-      <View>
-        <ShowInfo show={show} />
-        <TouchableOpacity style={styles.seasonContainer} onPress={openModal}>
-          <Text style={styles.seasonText}>Season: {selectedSeason}</Text>
-          <ImageIcon
-            style={{marginLeft: 8}}
-            size={16}
-            source={arrowDownIcon}
-            color={colors.primary}
-          />
-        </TouchableOpacity>
-      </View>
+        <>
+            <FlatList
+                contentContainerStyle={{paddingBottom: 16}}
+                ListHeaderComponent={() => <Header />}
+                data={data ? data.seasons[selectedSeason] : []}
+                renderItem={renderItem}
+            />
+            <SeasonModal
+                ref={modalizeRef}
+                selectedSeason={selectedSeason}
+                onSelectSeason={setSelectedSeason}
+                seasons={data?.seasonNames || []}
+            />
+        </>
     );
-  }
-
-  return (
-    <>
-      <FlatList
-        contentContainerStyle={{paddingBottom: 16}}
-        ListHeaderComponent={() => <Header />}
-        data={data ? data.seasons[selectedSeason] : []}
-        renderItem={renderItem}
-      />
-      <SeasonModal
-        ref={modalizeRef}
-        selectedSeason={selectedSeason}
-        onSelectSeason={setSelectedSeason}
-        seasons={data?.seasonNames || []}
-      />
-    </>
-  );
 }
 
 const styles = StyleSheet.create({
-  seasonContainer: {
-    paddingHorizontal: SIZE.padding,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: SIZE.margin,
-  },
-  seasonText: {
-    fontWeight: 'bold',
-    color: colors.onBackground,
-    fontSize: 20,
-  },
-  content: {
-    marginTop: SIZE.margin,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingText: {
-    color: colors.onBackground,
-    fontSize: 20,
-  },
+    seasonContainer: {
+        paddingHorizontal: SIZE.padding,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: SIZE.margin,
+    },
+    seasonText: {
+        fontWeight: 'bold',
+        color: colors.onBackground,
+        fontSize: 20,
+    },
+    content: {
+        marginTop: SIZE.margin,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    ratingText: {
+        color: colors.onBackground,
+        fontSize: 20,
+    },
 });
