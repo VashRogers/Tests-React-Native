@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
+import { render } from 'test-utils';
 import {StarRating} from '../StarRating';
 
 //describe engloba as funções de determinado componente e.g.: o componente "StarRating"
@@ -22,7 +22,7 @@ describe('StarRating', () => {
 
     // describe('rating was not passing', () => {
     //     it('the component return nothing', () => {
-    //         const {container} = render(<StarRating />);
+    //         const {container} = render(<StarRating />, {wrapper:undefined});
 
     //         expect(container.children).toEqual([]);
     //     });
